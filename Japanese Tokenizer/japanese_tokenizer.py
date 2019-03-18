@@ -8,31 +8,43 @@ class MaxMatch:
         start = time.time()
         with open(wordlist, 'r', encoding = "UTF-8") as dictionary: 
             for word in dictionary.readlines():
-                d.append(word)
-        print("Initialized MaxMatch object in " + str(time.time() - start) + \
+                if word[-1] == '\n':
+                    word = word[:-1]
+                self.d.append(word)
+        print("Initialized MaxMatch object in " + str(round(time.time() - start, 2)) + \
          " Seconds")
 
     def tokenize(self, line):
         start = time.time()
-        #pord = Possible Word
+        line = line.replace(' ','').replace('\n','')
+        #pord means Possible Word
         pord = line
         product = ''
-        while line != '':
-            if pord in self.d
-
-        print("Tokenized Line in " + str(time.time() - start) + " Seconds")
+        while len(line) > 0:
+            if pord in self.d:
+                product += pord + ' '
+                line = line[len(pord):]
+                pord = line
+            elif len(pord) == 1:
+                product += pord + ' '
+                line = line[len(pord):]
+                pord = line
+            else:
+                pord = pord[:-1]
+        product += '\n'
+        print("Tokenized Line in " + str(round(time.time() - start, 2)) + " Seconds")
+        return product
 
     def process(self, input, output):
         start = time.time()
-        with open(in_file, 'r', encoding = "UTF-8") as open_in:
-            with open(out_file, 'w', encoding = "UTF-8") as open_out:
+        with open(input, 'r', encoding = "UTF-8") as open_in:
+            with open(output, 'w', encoding = "UTF-8") as open_out:
                 for line in open_in.readlines():
-                    spaced_line = maxmatch(line)
+                    spaced_line = self.tokenize(line)
                     open_out.write(spaced_line)
-        print("Tokenized " str(input) + "to" str(output) + "in" + \
-         str(time.time() - start) + " Seconds")
+        print("Tokenized " + input + " to " + output + " in " + \
+         str(round(time.time() - start, 2)) + " Seconds")
 
-# Default Script
-if __name__ == '__main__':
-    MaxMatch("./japanese_wordlist.txt").process(sys.argv[1], sys.argv[2])
+#Actual Execution is Here
+MaxMatch("./japanese_wordlist.txt").process(sys.argv[1], sys.argv[2])
 
